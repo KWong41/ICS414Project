@@ -96,27 +96,27 @@ The goal for Milestone 1 was to implement a somewhat working web application usi
 Here are some "behind-the-scenes" drawings that we used as mock-up drafts in the creation of our web application.
 
 ## Mock-up Home Page
-![](images/sell-page2.jpg)
+![](images/inserthomepagehere.jpg)
 
 ## What makes this project stand out from others (what is our special sauce)?
 
-We believe that our project has plenty of user-friendly functionality to go with our project.  However, we spent the most time trying to refine this project by creating an application that would look eye-appealing both to the user and the administrators that use it.  We put alot of throught into the graphics design of this website as well as the Johnsonslist logos, team logos, and multiple other exciting web pages and we wanted to celebrate that by showing it off in this project.  We believe that this sales website has what it takes to compete against other buy and sell websites.  To summarize, with the combination of user-friendliness and graphics design, we believe that this web application stands out amongst some of the best sites out there.  
+insert special sauce here
 
 ## Meet the team!
 
 ![](images/insertteamlogohere.png)
 
-Front-End/Back-End Development/Calendar Github.io page: Ryuto Kitagawa
+Front-End/Back-End Development: Ryuto Kitagawa
 
 [Professional Profile](https://ryutokitagawa.github.io/)
 
-Front-End/Back-End Development: Kason Shiroma
+Front-End/Back-End Development: Davon Moss
 
-[https://kasons.github.io/](https://kasons.github.io/)
+[Professional Profile](https://kasons.github.io/)
 
-Back-End Production/Development/JohnsonsList Github.io page: Kevin Wong
+Back-End Production/Development/Calendar Github.io page: Kevin Wong
 
-[https://kwong41.github.io/](https://kwong41.github.io/)
+[Professional Profile](https://kwong41.github.io/)
 
 ## Community Feedback
 
