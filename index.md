@@ -9,7 +9,7 @@
 
 ## Overview
 
-This calendar website is a website utilizing semantic ui, react.js, meteor, and mongoDB to create a website that can be used by any user. Community members of UH Manoa will be able to schedule an event on this website by producing or outputting a .ics file
+This calendar website is a website utilizing semantic ui, react.js, meteor, and mongoDB to create a website that can be used by any user. Community members of UH Manoa will be able to schedule an event on this website by producing or exporting a .ics file
 
 For more information on the techstack used:
 * [Meteor](https://www.meteor.com/) for Javascript-based implementation of client and server code. 
