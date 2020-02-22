@@ -66,8 +66,8 @@ To intially run the application, [install Meteor](https://www.meteor.com/install
 $ meteor npm install
 ```
 
-Next, go to [this](https://github.com/Johnsonslist/Johnsonslist) link and clone this project to your local computer.
-You can either download a zip file version of this project or run it through the commandline using the following commands:
+Next, go to [this](https://github.com/KWong41/ICS414Project) link to clone this project to your local computer.
+You can either download a zip file version of this project or run this project using the commandline:
 
 ```
 cd (in your local directory of where you stored this project)
