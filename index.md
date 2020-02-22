@@ -112,7 +112,7 @@ Front-End/Back-End Development: Ryuto Kitagawa
 
 Front-End/Back-End Development: Davon Moss
 
-[Professional Profile](https://kasons.github.io/)
+[Professional Profile](https://davonmoss.github.io/)
 
 Back-End Production/Development/Calendar Github.io page: Kevin Wong
 
