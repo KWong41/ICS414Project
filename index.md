@@ -114,7 +114,7 @@ Front-End/Back-End Development: Davon Moss
 
 [Professional Profile](https://davonmoss.github.io/)
 
-Back-End Production/Development/Calendar Github.io page: Kevin Wong
+Back-End Production/Development/Github.io project page: Kevin Wong
 
 [Professional Profile](https://kwong41.github.io/)
 
