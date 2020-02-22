@@ -106,7 +106,7 @@ We believe that our project has plenty of user-friendly functionality to go with
 
 ![](images/insertteamlogohere.png)
 
-Front-End/Back-End Development/JohnsonsList Github.io page: Ryuto Kitagawa
+Front-End/Back-End Development/Calendar Github.io page: Ryuto Kitagawa
 
 [Professional Profile](https://ryutokitagawa.github.io/)
 
