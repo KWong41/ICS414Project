@@ -29,6 +29,10 @@ Refer to this section for the various links associated with Johnsonslist.
 
 insert Goals here
 
+## Mock pages
+
+insert Mock pages here and description
+
 ## User Guide
 
 insert User Guide here
