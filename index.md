@@ -31,7 +31,11 @@ insert Goals here
 
 ## Mock pages
 
-insert Mock pages here and description
+Mock pages 1
+![](app/public/images/CalendarTemplate.jpg)
+
+Mock pages 2
+![](app/public/images/CalendarTemplate2.jpg)
 
 ## User Guide
 
