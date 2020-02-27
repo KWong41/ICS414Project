@@ -31,10 +31,10 @@ insert Goals here
 
 ## Mock pages
 
-Mock pages 1
+Mock page 1
 ![](app/public/images/CalendarTemplate.jpg)
 
-Mock pages 2
+Mock page 2
 ![](app/public/images/CalendarTemplate2.jpg)
 
 These are the mock pages that we used as guidance for our project.  The mock pages involve quite a bit of functionality on each mock template.  The functions that we are planning on using involves a search bar, calendar template, description for each event, add event icon, and a settings icon.
