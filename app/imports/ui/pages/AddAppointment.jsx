@@ -19,7 +19,7 @@ const formSchema = new SimpleSchema({
 });
 
 /** Renders the Page for adding a document. */
-class AddStuff extends React.Component {
+class AddAppointment extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
@@ -42,7 +42,7 @@ class AddStuff extends React.Component {
     return (
         <Grid container centered>
           <Grid.Column>
-            <Header as="h2" textAlign="center">Add Stuff</Header>
+            <Header as="h2" textAlign="center">Create Appointment</Header>
             <AutoForm ref={ref => { fRef = ref; }} schema={formSchema} onSubmit={data => this.submit(data, fRef)} >
               <Segment>
                 <TextField name='name'/>
@@ -58,4 +58,4 @@ class AddStuff extends React.Component {
   }
 }
 
-export default AddStuff;
+export default AddAppointment;
