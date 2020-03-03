@@ -22,9 +22,9 @@ class Calendar extends React.Component {
           <Table celled>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Quantity</Table.HeaderCell>
-                <Table.HeaderCell>Condition</Table.HeaderCell>
+                <Table.HeaderCell>Appointment</Table.HeaderCell>
+                <Table.HeaderCell>People</Table.HeaderCell>
+                <Table.HeaderCell>Importance</Table.HeaderCell>
                 <Table.HeaderCell>Edit</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
