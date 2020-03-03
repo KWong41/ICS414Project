@@ -49,6 +49,7 @@ class AddAppointment extends React.Component {
                 <NumField name='quantity' decimal={false}/>
                 <SelectField name='condition'/>
                 <SubmitField value='Submit'/>
+                <SubmitField value='upload'/>
                 <ErrorsField/>
               </Segment>
             </AutoForm>
