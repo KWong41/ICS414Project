@@ -9,23 +9,25 @@ import SimpleSchema from 'simpl-schema';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
-  name: String,
-  quantity: Number,
-  condition: {
+  AddTitle: String,
+  people: Number,
+  dates: String,
+  importance: {
     type: String,
-    allowedValues: ['excellent', 'good', 'fair', 'poor'],
+    allowedValues: ['critical', 'important', 'average', 'routine'],
     defaultValue: 'good',
   },
+  description: String,
 });
 
 /** Renders the Page for adding a document. */
-class AddStuff extends React.Component {
+class AddAppointment extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    const { name, quantity, condition } = data;
+    const { AddTitle, people, importance, description, dates } = data;
     const owner = Meteor.user().username;
-    Stuffs.insert({ name, quantity, condition, owner },
+    Stuffs.insert({ AddTitle, people, importance, description, dates, owner },
       (error) => {
         if (error) {
           swal('Error', error.message, 'error');
@@ -42,13 +44,16 @@ class AddStuff extends React.Component {
     return (
         <Grid container centered>
           <Grid.Column>
-            <Header as="h2" textAlign="center">Add Stuff</Header>
+            <Header as="h2" textAlign="center">Create Appointment</Header>
             <AutoForm ref={ref => { fRef = ref; }} schema={formSchema} onSubmit={data => this.submit(data, fRef)} >
               <Segment>
-                <TextField name='name'/>
-                <NumField name='quantity' decimal={false}/>
-                <SelectField name='condition'/>
+                <TextField name='AddTitle'/>
+                <NumField name='people' decimal={false}/>
+                <TextField name='dates'/>
+                <SelectField name='importance'/>
+                <TextField name='description'/>
                 <SubmitField value='Submit'/>
+                <SubmitField value='upload'/>
                 <ErrorsField/>
               </Segment>
             </AutoForm>
@@ -58,4 +63,4 @@ class AddStuff extends React.Component {
   }
 }
 
-export default AddStuff;
+export default AddAppointment;

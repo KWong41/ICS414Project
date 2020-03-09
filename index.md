@@ -29,6 +29,14 @@ Refer to this section for the various links associated with Johnsonslist.
 
 insert Goals here
 
+## Mock pages
+
+Mock pages 1
+![](app/public/images/CalendarTemplate.jpg)
+
+Mock pages 2
+![](app/public/images/CalendarTemplate2.jpg)
+
 ## User Guide
 
 insert User Guide here
