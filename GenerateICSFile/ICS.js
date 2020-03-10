@@ -2,6 +2,7 @@ class ICS_Generator {
     constructor() {
         this.fs = require('fs');
         this.version = 2.0;
+        this.ignore = ["BEGIN:VCALENDAR", "END:VCALENDAR"];
     }
 
     generate_ics_file(events) {
@@ -31,6 +32,36 @@ class ICS_Generator {
         }
         return result;
     }
+
+    process_ics_file(information) {
+        let result = [];
+        let temp_event;
+        information = information.split("\n");
+        for (var event_string of information) {
+            if (event_string == "BEGIN:VEVENT") {
+                temp_event = new Event();
+            } else if (event_string.substr(0, 8) == "SUMMARY:") {
+                temp_event.summary = event_string.substr(8);
+            } else if (event_string.substr(0, 8) == "DTSTART:") {
+                temp_event.start = event_string.substr(8);
+            } else if (event_string.substr(0, 6) == "DTEND:") {
+                temp_event.end = event_string.substr(6);
+            } else if (event_string.substr(0, 6) == "CLASS:") {
+                temp_event.access_class = event_string.substr(6);
+            } else if (event_string == "END:VEVENT") {
+                result.push(temp_event);
+            } else if (event_string.substr(0, 8) == "VERSION:") {
+                continue;
+            } else if (this.ignore.includes(event_string)) {
+                continue;
+            } else {
+                console.log(event_string);
+                console.warn("Error, incorrect event format");
+                break;
+            }
+        }
+        return result;
+    }
 }
 
 class Event {
@@ -43,7 +74,4 @@ class Event {
 }
 
 let test = new ICS_Generator();
-let event_1 = new Event("Event One", "20200221T043000Z", "20200221T073000Z");
-let event_2 = new Event("Event Two", "20200221T033000Z", "20200221T051500Z");
-let x = [event_1, event_2];
-test.generate_ics_file(x);
+console.log(test.process_ics_file(check));

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stuffs } from '/imports/api/stuff/Stuff';
-import { Grid, Segment, Header } from 'semantic-ui-react';
+import { Button, Grid, Segment, Header } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, TextField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
@@ -53,7 +53,6 @@ class AddAppointment extends React.Component {
                 <SelectField name='importance'/>
                 <TextField name='description'/>
                 <SubmitField value='Submit'/>
-                <SubmitField value='upload'/>
                 <ErrorsField/>
               </Segment>
             </AutoForm>
