@@ -43,7 +43,7 @@ insert User Guide here
 
 ## Landing page
 
-![](images/Insertlandingpage.png.png)
+![](app/public/images/LandingPageM2.jpg)
 
 
 When a user signs in, the Landing page will show them a calendar view for that month, and any events that are scheduled during that month. The user will be able to click on these events and get more information about them, and can also add and remove events from this page.
