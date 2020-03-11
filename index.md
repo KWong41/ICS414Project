@@ -27,7 +27,7 @@ Refer to this section for the various links associated with Johnsonslist.
 
 ## Functionality Goals
 
-insert Goals here
+We want this to be a user-friendly, intuitive Calendar application. Our goals are to implement the functionality specified in RFC 5545 and 7986, as required by the assignment.
 
 ## Mock pages
 
@@ -46,7 +46,7 @@ insert User Guide here
 ![](images/Insertlandingpage.png)
 
 
-insert landing page description here
+When a user signs in, the Landing page will show them a calendar view for that month, and any events that are scheduled during that month. The user will be able to click on these events and get more information about them, and can also add and remove events from this page.
 
 ## Home page
 
