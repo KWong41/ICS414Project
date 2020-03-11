@@ -60,7 +60,7 @@ class UploadICS extends React.Component {
         console.log(result);
         this.setState({events: result});
     }
-    
+
     render() {
         return (
             <div onSubmit={this.onFormSubmit}>
