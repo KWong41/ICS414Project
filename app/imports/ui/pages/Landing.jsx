@@ -3,6 +3,7 @@ import dateFns from "date-fns";
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import Event from "../components/Event";
 import PropTypes from 'prop-types';
+import Modal from "../components/Modal";
 
 class Landing extends React.Component {
   state = {
@@ -78,7 +79,9 @@ class Landing extends React.Component {
               <span className="number">{formattedDate}</span>
               <span className="bg">{formattedDate}</span>
               {/*this.props.events.map((event) => <Event key={event._id} event={event} />)*/}
-              <Event></Event>
+              <Event>
+                <Modal/>
+              </Event>
             </div>
         );
         day = dateFns.addDays(day, 1);
