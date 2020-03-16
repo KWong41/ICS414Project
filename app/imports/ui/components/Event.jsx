@@ -1,22 +1,23 @@
 import React from 'react';
-import { List, Label } from 'semantic-ui-react';
+import { List, Container } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
+import Modal from "../components/Modal";
+
+const App = ({ children }) => (
+
+    <Container style={{ margin: 10 }}>
+      {children}
+    </Container>
+);
 
 /** Renders a single row in the List Stuff table. See pages/Calendar.jsx. */
 class Event extends React.Component {
   render() {
     return (
-      <List selection>
-        <List.Item>
-          <Label color='blue' horizontal>
-            1:00-3:00
-            {/*{this.props.event.startTime}-{this.props.event.endTime}*/}
-          </Label>
-            Event Name
-            {/*{this.props.event.name}*/}
-        </List.Item>
-      </List>
+      <App>
+        <Modal/>
+      </App>
     );
   }
 }
