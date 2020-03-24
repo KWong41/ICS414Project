@@ -1,12 +1,14 @@
 import React from 'react';
-import { Events, EventSchema } from '/imports/api/event/Event';
-import { Button, Grid, Segment, Header } from 'semantic-ui-react';
+import { Meteor } from 'meteor/meteor';
+import { Button, Grid, Segment, Header, Loader } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, TextField} from 'uniforms-semantic';
 import swal from 'sweetalert';
-import { Meteor } from 'meteor/meteor';
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import SimpleSchema from 'simpl-schema';
 import { format } from 'date-fns';
+import { Events, EventSchema } from '/imports/api/event/Event';
+import { withTracker } from 'meteor/react-meteor-data';
+import PropTypes from 'prop-types';
 
 
 const formSchema = new SimpleSchema({
@@ -96,14 +98,19 @@ class AddAppointment extends React.Component {
               swal('Error', error.message, 'error');
             } else {
               swal('Success', 'Item added successfully', 'success');
+              console.log(this.props);
               formRef.reset();
             }
           });
+        }
     }
+
+  render() {
+      return (this.props.ready) ? this.renderPage() : <Loader active> Getting data</Loader>;
   }
 
   /** Render the form. Use Uniforms: https://github.com/vazco/uniforms */
-  render() {
+  renderPage() {
     let fRef = null;
     return (
         <Grid container centered>
@@ -128,4 +135,15 @@ class AddAppointment extends React.Component {
   }
 }
 
-export default AddAppointment;
+AddAppointment.propTypes = {
+    events: PropTypes.array.isRequired,
+    ready: PropTypes.bool.isRequired,
+};
+
+export default withTracker(() => {
+    const events_subscription = Meteor.subscribe('Events');
+    return {
+        events: Events.find({}).fetch(),
+        ready: events_subscription.ready(),
+    };
+})(AddAppointment);

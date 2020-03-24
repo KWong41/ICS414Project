@@ -3,7 +3,7 @@ import { Roles } from 'meteor/alanning:roles';
 import { Stuffs } from '../../api/stuff/Stuff';
 import { Events } from '../../api/event/Event';
 
-Meteor.publish('Event', function publish() {
+Meteor.publish('Events', function publish() {
     if (this.userId) {
         const username = Meteor.users.findOne(this.userId).username;
         return Events.find({owner: username });
