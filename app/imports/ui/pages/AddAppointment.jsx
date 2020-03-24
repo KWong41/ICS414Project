@@ -26,53 +26,6 @@ const formSchema = new SimpleSchema({
     },
 });
 
-/** Renders the Page for adding a document. */
-/** Test Cases **/
-/**
- * Case 1: Start Month = 20
- *         Start Day   = 12
- *         Start Year  = 2020
- *
- * Result 1: Error, start month out of range
- *
- * Case 2: Start Month = -3
- *         Start Day   = 12
- *         Start Year  = 2020
- *
- * Result 2: Error, start month out of range
- *
- * Case 3: Start Month = 3
- *         Start Day   = -12
- *         Start Year  = 2020
- *
- * Result 3: Error, start day out of range
- *
- * Case 4: Start Month = 3
- *         Start Day   = 32 
- *         Start Year  = 2020
- *
- * Result 4: Error, start day out of range
- *
- * Case 5: Start Month = 3
- *         Start Day   = 12
- *         Start Year  = 2020
- *         
- *         End Month   = 4
- *         End Day     = 22
- *         End Year    = 1980
- *
- * Result 5: Error, start date must come before end date
- *
- * Case 6: Start Month = 3
- *         Start Day   = 12
- *         Start Year  = 2020
- *         
- *         End Month   = 4
- *         End Day     = 22
- *         End Year    = 2020 
- *
- * Result 6: Success
-*/
 class AddAppointment extends React.Component {
 
   /** On submit, insert the data. */
@@ -98,7 +51,6 @@ class AddAppointment extends React.Component {
               swal('Error', error.message, 'error');
             } else {
               swal('Success', 'Item added successfully', 'success');
-              console.log(this.props);
               formRef.reset();
             }
           });

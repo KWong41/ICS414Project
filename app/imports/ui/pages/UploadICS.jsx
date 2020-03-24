@@ -29,7 +29,7 @@ class UploadICS extends React.Component {
     process_ics_file(information) {
         let result = [];
         let temp_event;
-        const owner = Meteor.user.username;
+        const owner = Meteor.user().username;
         information = information.split("\n");
         for (var event_string of information) {
             if (event_string == "BEGIN:VEVENT") {
@@ -60,9 +60,7 @@ class UploadICS extends React.Component {
                            "end" : my_event.end,
                            "access_class" : my_event.access_class,
                            "owner" : owner});
-            console.log(my_event);
         }
-        console.log(this.props);
     }
 
     render() {

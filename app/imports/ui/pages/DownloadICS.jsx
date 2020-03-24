@@ -17,6 +17,7 @@ class DownloadICS extends React.Component {
         let fileDownload = require('react-file-download');
         let result = "BEGIN:VCALENDAR\n";
         result += "VERSION:2.0\n";
+
         for (let my_event of this.props.events) {
             result += "BEGIN:VEVENT\n";
             result += my_event.summary ? ("SUMMARY:" + my_event.summary + "\n") : "";
@@ -37,7 +38,7 @@ class DownloadICS extends React.Component {
         return (
             <div onSubmit={this.onFormSubmit}>
                 <h1>React js File Upload Tutorial</h1>
-                <Button onClick={this.download}>Click Me!</Button>
+                <Button onClick={() => this.download(this)}>Click Me!</Button>
             </div>
         )
     }
