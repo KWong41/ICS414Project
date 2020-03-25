@@ -21,9 +21,10 @@ class DownloadICS extends React.Component {
         for (let my_event of this.props.events) {
             result += "BEGIN:VEVENT\n";
             result += my_event.summary ? ("SUMMARY:" + my_event.summary + "\n") : "";
-            result += my_event.start ? ("DSTART:" + my_event.start + "\n") : "";
+            result += my_event.start ? ("DTSTART:" + my_event.start + "\n") : "";
             result += my_event.end ? ("DTEND:" + my_event.end + "\n") : "";
             result += my_event.access_class ? ("CLASS:" + my_event.access_class + "\n") : "";
+            result += "END:VEVENT\n";
         }
         result += "END:VCALENDAR";
         fileDownload(result, 'events.ics');
