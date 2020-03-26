@@ -25,9 +25,11 @@ class DownloadICS extends React.Component {
             result += "DTSTART:" + my_event.start + "\n";
             result += "DTEND:" + my_event.end + "\n";
             result += "CLASS:" + my_event.access_class + "\n";
-            result += my_event.geolocation != "null" ? ("GEO:" + my_event.geolocation + "\n") : "";
+            result += my_event.geolocation ? ("GEO:" + my_event.geolocation + "\n") : "";
             result += "PRIORITY:" + my_event.priority + "\n"; 
+            result += my_event.location ? "LOCATION:" + my_event.location + "\n" : "";
             result += "END:VEVENT\n";
+            console.log(my_event.location);
         }
         result += "END:VCALENDAR";
         fileDownload(result, 'events.ics');
