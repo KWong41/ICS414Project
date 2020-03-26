@@ -28,11 +28,15 @@ const formSchema = new SimpleSchema({
 
 class AddAppointment extends React.Component {
 
+  geolocation = null;
+
   /** On submit, insert the data. */
   submit(data, formRef) {
     const { summary, start_month, start_day, start_year, end_month, end_day, end_year, access_class } = data;
     const start = format(new Date(start_year, start_month - 1, start_day), "yyyyMMdd'T'HHmmss'Z'");
     const end = format(new Date(end_year, end_month - 1, end_day), "yyyyMMdd'T'HHmmss'Z'");
+    const geolocation = this.geolocation ? this.geolocation.coords.latitude + ";" + this.geolocation.coords.longitude : "null";
+
     if (start_month < 1 || start_month > 12) {
         swal('Error', 'Start month out of range', 'error');
     } else if (start_day < 1 || start_day > 31) {
@@ -45,7 +49,7 @@ class AddAppointment extends React.Component {
         swal ('Error', 'Start must come before end date', 'error');
     } else {
         const owner = Meteor.user().username;
-        Events.insert({ summary, start, end, access_class, owner },
+        Events.insert({ summary, start, end, access_class, geolocation, owner },
           (error) => {
             if (error) {
               swal('Error', error.message, 'error');
@@ -64,6 +68,11 @@ class AddAppointment extends React.Component {
   /** Render the form. Use Uniforms: https://github.com/vazco/uniforms */
   renderPage() {
     let fRef = null;
+    const geolocation_finder = require('geolocation');
+    geolocation_finder.getCurrentPosition((err, position) => {
+        if (err) throw err;
+        this.geolocation = position;
+    });
     return (
         <Grid container centered>
           <Grid.Column>
