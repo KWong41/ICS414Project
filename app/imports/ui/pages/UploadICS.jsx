@@ -42,6 +42,8 @@ class UploadICS extends React.Component {
                 temp_event.end = event_string.substr(6);
             } else if (event_string.substr(0, 6) == "CLASS:") {
                 temp_event.access_class = event_string.substr(6);
+            } else if (event_string.substr(0, 4) == "GEO:") {
+                temp_event.geolocation = event_string.substr(4);
             } else if (event_string == "END:VEVENT") {
                 result.push(temp_event);
             } else if (event_string.substr(0, 8) == "VERSION:") {
@@ -59,6 +61,7 @@ class UploadICS extends React.Component {
             Events.insert({"summary" : my_event.summary, "start" : my_event.start,
                            "end" : my_event.end,
                            "access_class" : my_event.access_class,
+                           "geolocation": my_event.geolocation ? my_event.geolocation : "null",
                            "owner" : owner});
         }
     }
