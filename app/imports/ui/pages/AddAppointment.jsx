@@ -19,6 +19,10 @@ const formSchema = new SimpleSchema({
     end_month: Number,
     end_day: Number,
     end_year: Number,
+    location: {
+        type: String,
+        optional: true,
+    },
     priority: {
         type: Number,
         defaultValue: 0,
@@ -36,10 +40,10 @@ class AddAppointment extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    const { summary, start_month, start_day, start_year, end_month, end_day, end_year, access_class, priority } = data;
+    const { summary, start_month, start_day, start_year, end_month, end_day, end_year, access_class, priority, location } = data;
     const start = format(new Date(start_year, start_month - 1, start_day), "yyyyMMdd'T'HHmmss'Z'");
     const end = format(new Date(end_year, end_month - 1, end_day), "yyyyMMdd'T'HHmmss'Z'");
-    const geolocation = this.geolocation ? this.geolocation.coords.latitude + ";" + this.geolocation.coords.longitude : "null";
+    const geolocation = this.geolocation ? this.geolocation.coords.latitude + ";" + this.geolocation.coords.longitude : null;
 
     if (start_month < 1 || start_month > 12) {
         swal('Error', 'Start month out of range', 'error');
@@ -53,7 +57,7 @@ class AddAppointment extends React.Component {
         swal ('Error', 'Start must come before end date', 'error');
     } else {
         const owner = Meteor.user().username;
-        Events.insert({ summary, start, end, access_class, geolocation, priority, owner },
+        Events.insert({ summary, start, end, access_class, geolocation, priority, location, owner },
           (error) => {
             if (error) {
               swal('Error', error.message, 'error');
@@ -91,6 +95,7 @@ class AddAppointment extends React.Component {
                 <NumField name='end_day'/>
                 <NumField name='end_year'/>
                 <NumField name='priority'/>
+                <TextField name='location'/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
               </Segment>

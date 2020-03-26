@@ -11,8 +11,15 @@ const EventSchema = new SimpleSchema({
   summary: String,
   start: String,
   end: String,
-  geolocation: String,
+  geolocation: {
+      type: String,
+      optional: true,
+  },
   priority: Number,
+  location: {
+      type: String,
+      optional: true,
+  },
   access_class: {
     type: String,
     allowedValues: ['PUBLIC', 'PRIVATE', 'CONFIDENTIAL'],
