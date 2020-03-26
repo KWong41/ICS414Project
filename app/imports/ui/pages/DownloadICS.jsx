@@ -19,12 +19,14 @@ class DownloadICS extends React.Component {
         result += "VERSION:2.0\n";
 
         for (let my_event of this.props.events) {
+            console.log(my_event);
             result += "BEGIN:VEVENT\n";
-            result += my_event.summary ? ("SUMMARY:" + my_event.summary + "\n") : "";
-            result += my_event.start ? ("DTSTART:" + my_event.start + "\n") : "";
-            result += my_event.end ? ("DTEND:" + my_event.end + "\n") : "";
-            result += my_event.access_class ? ("CLASS:" + my_event.access_class + "\n") : "";
+            result += "SUMMARY:" + my_event.summary + "\n";
+            result += "DTSTART:" + my_event.start + "\n";
+            result += "DTEND:" + my_event.end + "\n";
+            result += "CLASS:" + my_event.access_class + "\n";
             result += my_event.geolocation != "null" ? ("GEO:" + my_event.geolocation + "\n") : "";
+            result += "PRIORITY:" + my_event.priority + "\n"; 
             result += "END:VEVENT\n";
         }
         result += "END:VCALENDAR";

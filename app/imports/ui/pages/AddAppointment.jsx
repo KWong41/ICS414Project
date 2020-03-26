@@ -19,6 +19,10 @@ const formSchema = new SimpleSchema({
     end_month: Number,
     end_day: Number,
     end_year: Number,
+    priority: {
+        type: Number,
+        defaultValue: 0,
+    },
     access_class: {
         type: String,
         allowedValues: ['PUBLIC', 'PRIVATE', 'CONFIDENTIAL'],
@@ -32,7 +36,7 @@ class AddAppointment extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    const { summary, start_month, start_day, start_year, end_month, end_day, end_year, access_class } = data;
+    const { summary, start_month, start_day, start_year, end_month, end_day, end_year, access_class, priority } = data;
     const start = format(new Date(start_year, start_month - 1, start_day), "yyyyMMdd'T'HHmmss'Z'");
     const end = format(new Date(end_year, end_month - 1, end_day), "yyyyMMdd'T'HHmmss'Z'");
     const geolocation = this.geolocation ? this.geolocation.coords.latitude + ";" + this.geolocation.coords.longitude : "null";
@@ -49,7 +53,7 @@ class AddAppointment extends React.Component {
         swal ('Error', 'Start must come before end date', 'error');
     } else {
         const owner = Meteor.user().username;
-        Events.insert({ summary, start, end, access_class, geolocation, owner },
+        Events.insert({ summary, start, end, access_class, geolocation, priority, owner },
           (error) => {
             if (error) {
               swal('Error', error.message, 'error');
@@ -62,7 +66,7 @@ class AddAppointment extends React.Component {
     }
 
   render() {
-      return (this.props.ready) ? this.renderPage() : <Loader active> Getting data</Loader>;
+      return this.renderPage();
   }
 
   /** Render the form. Use Uniforms: https://github.com/vazco/uniforms */
@@ -86,6 +90,7 @@ class AddAppointment extends React.Component {
                 <NumField name='end_month'/>
                 <NumField name='end_day'/>
                 <NumField name='end_year'/>
+                <NumField name='priority'/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
               </Segment>
@@ -96,15 +101,4 @@ class AddAppointment extends React.Component {
   }
 }
 
-AddAppointment.propTypes = {
-    events: PropTypes.array.isRequired,
-    ready: PropTypes.bool.isRequired,
-};
-
-export default withTracker(() => {
-    const events_subscription = Meteor.subscribe('Events');
-    return {
-        events: Events.find({}).fetch(),
-        ready: events_subscription.ready(),
-    };
-})(AddAppointment);
+export default AddAppointment;

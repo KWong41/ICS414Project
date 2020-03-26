@@ -7,10 +7,12 @@ const Events = new Mongo.Collection('Events');
 
 /** Define a schema to specify the structure of each document in the collection. */
 const EventSchema = new SimpleSchema({
+  owner: String,
   summary: String,
   start: String,
   end: String,
   geolocation: String,
+  priority: Number,
   access_class: {
     type: String,
     allowedValues: ['PUBLIC', 'PRIVATE', 'CONFIDENTIAL'],

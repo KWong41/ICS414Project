@@ -6,7 +6,7 @@ import { Events } from '../../api/event/Event';
 Meteor.publish('Events', function publish() {
     if (this.userId) {
         const username = Meteor.users.findOne(this.userId).username;
-        return Events.find();
+        return Events.find({ owner: username });
     }
     return this.ready();
 });
