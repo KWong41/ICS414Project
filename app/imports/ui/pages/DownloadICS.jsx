@@ -17,6 +17,10 @@ class DownloadICS extends React.Component {
         let fileDownload = require('react-file-download');
         let result = "BEGIN:VCALENDAR\n";
         result += "VERSION:2.0\n";
+        result += "START:VTIMEZONE\n"
+        result += "TZID:"
+        result += /\((.*)\)/.exec(new Date().toString())[1] + "\n";
+        result += "END:VTIMEZONE\n"
 
         for (let my_event of this.props.events) {
             console.log(my_event);
@@ -25,11 +29,18 @@ class DownloadICS extends React.Component {
             result += "DTSTART:" + my_event.start + "\n";
             result += "DTEND:" + my_event.end + "\n";
             result += "CLASS:" + my_event.access_class + "\n";
-            result += my_event.geolocation ? ("GEO:" + my_event.geolocation + "\n") : "";
+            result += my_event.geolocation ?
+                      ("GEO:" + my_event.geolocation + "\n") : "";
             result += "PRIORITY:" + my_event.priority + "\n"; 
-            result += my_event.location ? "LOCATION:" + my_event.location + "\n" : "";
+            result += my_event.location ?
+                      "LOCATION:" + my_event.location + "\n" : "";
+            result += my_event.resources ? 
+                      "RESOURCES:" + my_event.resources + "\n" : "";
+            result += "ATTENDEE;RSVP=";
+            result += my_event.rsvp.length ?
+                      "TRUE:mailto:" + my_event.rsvp + "\n" : "FALSE\n"
+                      
             result += "END:VEVENT\n";
-            console.log(my_event.location);
         }
         result += "END:VCALENDAR";
         fileDownload(result, 'events.ics');

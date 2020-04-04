@@ -32,6 +32,18 @@ const formSchema = new SimpleSchema({
         allowedValues: ['PUBLIC', 'PRIVATE', 'CONFIDENTIAL'],
         defaultValue: 'PUBLIC',
     },
+    resources: {
+        type: String,
+        optional: true,
+    },
+    people: {
+        type: String,
+        optional: true,
+    },
+});
+
+const rsvpFormSchema = new SimpleSchema({
+    rsvp: String,
 });
 
 class AddAppointment extends React.Component {
@@ -40,10 +52,19 @@ class AddAppointment extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    const { summary, start_month, start_day, start_year, end_month, end_day, end_year, access_class, priority, location } = data;
-    const start = format(new Date(start_year, start_month - 1, start_day), "yyyyMMdd'T'HHmmss'Z'");
-    const end = format(new Date(end_year, end_month - 1, end_day), "yyyyMMdd'T'HHmmss'Z'");
-    const geolocation = this.geolocation ? this.geolocation.coords.latitude + ";" + this.geolocation.coords.longitude : null;
+    const { summary, start_month, start_day, start_year, end_month, end_day,
+            end_year, access_class, priority, location, resources,
+            people } = data;
+    const start = format(new Date(start_year, start_month - 1, start_day),
+          "yyyyMMdd'T'HHmmss'Z'");
+    const end = format(new Date(end_year, end_month - 1, end_day),
+          "yyyyMMdd'T'HHmmss'Z'");
+    const geolocation = this.geolocation ?
+          this.geolocation.coords.latitude + ";"
+          + this.geolocation.coords.longitude
+          : null;
+    const rsvp = people.trim().split(",");
+    console.log(rsvp);
 
     if (start_month < 1 || start_month > 12) {
         swal('Error', 'Start month out of range', 'error');
@@ -57,7 +78,8 @@ class AddAppointment extends React.Component {
         swal ('Error', 'Start must come before end date', 'error');
     } else {
         const owner = Meteor.user().username;
-        Events.insert({ summary, start, end, access_class, geolocation, priority, location, owner },
+        Events.insert({ summary, start, end, access_class, geolocation, priority,
+                        location, resources, rsvp, owner },
           (error) => {
             if (error) {
               swal('Error', error.message, 'error');
@@ -96,6 +118,8 @@ class AddAppointment extends React.Component {
                 <NumField name='end_year'/>
                 <NumField name='priority'/>
                 <TextField name='location'/>
+                <TextField name='resources'/>
+                <TextField name='people'/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
               </Segment>
