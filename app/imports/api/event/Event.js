@@ -15,7 +15,10 @@ const EventSchema = new SimpleSchema({
       type: String,
       optional: true,
   },
-  priority: Number,
+  priority: {
+      type: Number,
+      defaultValue: 0,
+  },
   location: {
       type: String,
       optional: true,
@@ -25,6 +28,11 @@ const EventSchema = new SimpleSchema({
     allowedValues: ['PUBLIC', 'PRIVATE', 'CONFIDENTIAL'],
     defaultValue: 'PUBLIC',
   },
+  resources: {
+      type: String,
+      optional: true,
+  },
+  rsvp : [String] 
 }, { tracker: Tracker });
 
 /** Attach this schema to the collection. */

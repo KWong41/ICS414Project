@@ -9,7 +9,6 @@ class UploadICS extends React.Component {
         super(props);
         this.state = {
             file: '',
-            ignore: ["BEGIN:VCALENDAR", "END:VCALENDAR"],
             events: []
         }
     }
@@ -48,27 +47,32 @@ class UploadICS extends React.Component {
                 temp_event.priority = parseInt(event_string.substr(9));
             } else if (event_string.substr(0, 9) == "LOCATION:") {
                 temp_event.location = event_string.substr(9);
+            } else if (event_string.substr(0, 10) == "RESOURCES:") {
+                temp_event.resources = event_string.substr(10);
+            } else if (event_string.substr(0, 26) == "ATTENDEE;RSVP=TRUE:mailto:") {
+                temp_event.rsvp = event_string.substr(26).split(',');
             } else if (event_string == "END:VEVENT") {
                 result.push(temp_event);
             } else if (event_string.substr(0, 8) == "VERSION:") {
                 continue;
-            } else if (this.state.ignore.includes(event_string)) {
-                continue;
             } else {
-                console.log(event_string);
-                console.warn("Error, incorrect event format");
-                break;
+                continue;
             }
         }
         
         for (var my_event of result) {
-            console.log(my_event);
+            if (my_event.summary == null || my_event.start == null || my_event.end == null) {
+                console.err("Given file not in proper format");
+            }
+            my_event.rsvp = my_event.rsvp ? my_event.rsvp : [];
             Events.insert({"summary" : my_event.summary, "start" : my_event.start,
                            "end" : my_event.end,
                            "access_class" : my_event.access_class,
                            "geolocation": my_event.geolocation ? my_event.geolocation : "null",
                            "priority" : my_event.priority,
                            "location" : my_event.location,
+                           "resources" : my_event.resources,
+                           "rsvp": my_event.rsvp,
                            "owner" : owner});
         }
     }
