@@ -9,13 +9,22 @@ const Events = new Mongo.Collection('Events');
 const EventSchema = new SimpleSchema({
   owner: String,
   summary: String,
-  start: String,
-  end: String,
+  start: Date,
+  end: Date,
+  organizer: String,
+  rsvp : [String], 
   geolocation: {
       type: String,
       optional: true,
   },
-  priority: Number,
+  timezone: {
+      type: String,
+      optional: true,
+  },
+  priority: {
+      type: Number,
+      defaultValue: 0,
+  },
   location: {
       type: String,
       optional: true,
@@ -25,6 +34,10 @@ const EventSchema = new SimpleSchema({
     allowedValues: ['PUBLIC', 'PRIVATE', 'CONFIDENTIAL'],
     defaultValue: 'PUBLIC',
   },
+  resources: {
+      type: String,
+      optional: true,
+  }
 }, { tracker: Tracker });
 
 /** Attach this schema to the collection. */
