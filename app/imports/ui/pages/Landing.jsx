@@ -3,7 +3,7 @@ import dateFns from "date-fns";
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import Event from "../components/Event";
 import PropTypes from 'prop-types';
-import Modal from "../components/Modal";
+import ModalWindow from "../components/ModalWindow";
 import { Events, EventSchema } from '/imports/api/event/Event';
 import { withTracker } from 'meteor/react-meteor-data';
 
@@ -60,18 +60,32 @@ class Landing extends React.Component {
     const dateFormat = "d";
     const rows = [];
 
-    console.log(this.props.events);
-
     let days = [];
     let day = startDate;
     let formattedDate = "";
+
+    /* Allows program to search through events by date */
+    let events_date = [];
+    for (const event_element of this.props.events) {
+        const event_month = String(event_element.start.getMonth());
+        const event_year = String(event_element.start.getYear());
+        const event_day = String(event_element.start.getDate());
+        events_date.push(`${event_month}-${event_day}-${event_year}`); 
+    }
 
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = dateFns.format(day, dateFormat);
         const cloneDay = day;
-        const month = dateFns.format(day, "M");
-        const year = dateFns.format(day, "yyyy");
+        const event_month = String(day.getMonth());
+        const event_year = String(day.getYear());
+        const event_day = String(day.getDate());
+        let index_of_events = this.getAllIndexes(events_date,`${event_month}-${event_day}-${event_year}`);
+        let events = [];
+        for (const i of index_of_events) {
+            events.push(this.props.events[i]);
+        }
+
         days.push(
             <div
                 className={`col cell ${
@@ -84,8 +98,7 @@ class Landing extends React.Component {
             >
               <span className="number">{formattedDate}</span>
               <span className="bg">{formattedDate}</span>
-              {/*this.props.events.map((event) => <Event key={event._id} event={event} />)*/}
-              <Event/> 
+              <Event events={events}/> 
             </div>
         );
         day = dateFns.addDays(day, 1);
@@ -126,6 +139,14 @@ class Landing extends React.Component {
           {this.renderCells()}
         </div>
     );
+  }
+
+  getAllIndexes(array, val) {
+      var indexes = [], i;
+      for (i = 0; i < array.length; i++) {
+          if (array[i] == val) indexes.push(i);
+      }
+      return indexes;
   }
 }
 
