@@ -3,6 +3,7 @@ import { Loader, Button } from 'semantic-ui-react';
 import { Events, EventSchema } from '/imports/api/event/Event';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 
 class DownloadICS extends React.Component {
     constructor(props) {
@@ -31,8 +32,8 @@ class DownloadICS extends React.Component {
         for (let my_event of this.props.events) {
             result += "BEGIN:VEVENT\n";
             result += "SUMMARY:" + my_event.summary + "\n";
-            result += "DTSTART:" + my_event.start + "\n";
-            result += "DTEND:" + my_event.end + "\n";
+            result += "DTSTART:" + format(my_event.start, "yyyyMMdd'T'HHmmss'Z'") + "\n";
+            result += "DTEND:" + format(my_event.end, "yyyyMMdd'T'HHmmss'Z'") + "\n";
             result += "CLASS:" + my_event.access_class + "\n";
             result += my_event.geolocation ?
                       ("GEO:" + my_event.geolocation + "\n") : "";
