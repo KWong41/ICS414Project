@@ -4,11 +4,13 @@ import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import Event from "../components/Event";
 import PropTypes from 'prop-types';
 import Modal from "../components/Modal";
+import {AddAppointment, summary, start_month, start_day, start_year, end_month, end_day, end_year, access_class, priority, location} from "../pages/AddAppointment";
 
 class Landing extends React.Component {
+
   state = {
     currentMonth: new Date(),
-    selectedDate: new Date()
+    selectedDate: new Date(),
   };
 
   renderHeader() {

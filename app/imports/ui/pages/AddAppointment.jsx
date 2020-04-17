@@ -45,15 +45,23 @@ class AddAppointment extends React.Component {
     const end = format(new Date(end_year, end_month - 1, end_day), "yyyyMMdd'T'HHmmss'Z'");
     const geolocation = this.geolocation ? this.geolocation.coords.latitude + ";" + this.geolocation.coords.longitude : null;
 
-    if (start_month < 1 || start_month > 12) {
+    if (data.start_month < 1 || data.start_month > 12) {
         swal('Error', 'Start month out of range', 'error');
-    } else if (start_day < 1 || start_day > 31) {
+    }
+
+    if (data.start_day < 1 || data.start_day > 31) {
         swal ('Error', 'Start day out of range', 'error');
-    } else if (end_month < 1 || end_month > 12) {
+    }
+
+    if (data.end_month < 1 || data.end_month > 12) {
         swal('Error', 'End month out of range', 'error');
-    } else if (end_day < 1 || end_day > 31) {
+    }
+
+    if (data.end_day < 1 || data.end_day > 31) {
         swal ('Error', 'End day out of range', 'error');
-    } else if (start > end) {
+    }
+
+    if (start > end) {
         swal ('Error', 'Start must come before end date', 'error');
     } else {
         const owner = Meteor.user().username;
