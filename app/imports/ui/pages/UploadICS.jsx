@@ -9,7 +9,6 @@ class UploadICS extends React.Component {
         super(props);
         this.state = {
             file: '',
-            ignore: ["BEGIN:VCALENDAR", "END:VCALENDAR"],
             events: []
         }
     }
@@ -37,9 +36,21 @@ class UploadICS extends React.Component {
             } else if (event_string.substr(0, 8) == "SUMMARY:") {
                 temp_event.summary = event_string.substr(8);
             } else if (event_string.substr(0, 8) == "DTSTART:") {
-                temp_event.start = event_string.substr(8);
+                const year = event_string.substr(8, 4)
+                const month = String(parseInt(event_string.substr(12, 2)) - 1);
+                const day = event_string.substr(14, 2);
+                const hrs = event_string.substr(17, 2);
+                const min = event_string.substr(19, 2);
+                const sec = event_string.substr(21, 2);
+               temp_event.start = new Date(year, month, day, hrs, min, sec);
             } else if (event_string.substr(0, 6) == "DTEND:") {
-                temp_event.end = event_string.substr(6);
+                const year = event_string.substr(6, 4)
+                const month = String(parseInt(event_string.substr(10, 2) - 1));
+                const day = event_string.substr(12, 2);
+                const hrs = event_string.substr(15, 2);
+                const min = event_string.substr(17, 2);
+                const sec = event_string.substr(19, 2);
+                temp_event.end = new Date(year, month, day, hrs, min, sec);
             } else if (event_string.substr(0, 6) == "CLASS:") {
                 temp_event.access_class = event_string.substr(6);
             } else if (event_string.substr(0, 4) == "GEO:") {
@@ -48,27 +59,37 @@ class UploadICS extends React.Component {
                 temp_event.priority = parseInt(event_string.substr(9));
             } else if (event_string.substr(0, 9) == "LOCATION:") {
                 temp_event.location = event_string.substr(9);
+            } else if (event_string.substr(0, 10) == "RESOURCES:") {
+                temp_event.resources = event_string.substr(10);
+            } else if (event_string.substr(0, 26) == "ATTENDEE;RSVP=TRUE:mailto:") {
+                temp_event.rsvp = event_string.substr(26).split(',');
+            } else if (event_string.substr(0, 25) == "ORGANIZER;SENT-BY=mailto:") {
+                temp_event.organizer = event_string.substr(25);
             } else if (event_string == "END:VEVENT") {
                 result.push(temp_event);
             } else if (event_string.substr(0, 8) == "VERSION:") {
                 continue;
-            } else if (this.state.ignore.includes(event_string)) {
-                continue;
             } else {
-                console.log(event_string);
-                console.warn("Error, incorrect event format");
-                break;
+                continue;
             }
         }
         
         for (var my_event of result) {
-            console.log(my_event);
-            Events.insert({"summary" : my_event.summary, "start" : my_event.start,
+            if (my_event.summary == null || my_event.start == null ||
+                my_event.end == null || my_event.organizer == null) {
+                console.log("Given file not in proper format");
+            }
+            my_event.rsvp = my_event.rsvp ? my_event.rsvp : [];
+            Events.insert({"summary" : my_event.summary,
+                           "start" : my_event.start,
                            "end" : my_event.end,
                            "access_class" : my_event.access_class,
-                           "geolocation": my_event.geolocation ? my_event.geolocation : "null",
+                           "geolocation": my_event.geolocation,
                            "priority" : my_event.priority,
                            "location" : my_event.location,
+                           "resources" : my_event.resources,
+                           "rsvp": my_event.rsvp,
+                           "organizer": my_event.organizer,
                            "owner" : owner});
         }
     }

@@ -4,7 +4,12 @@ import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import Event from "../components/Event";
 import PropTypes from 'prop-types';
 import Modal from "../components/Modal";
+<<<<<<< HEAD
 import {AddAppointment, summary, start_month, start_day, start_year, end_month, end_day, end_year, access_class, priority, location} from "../pages/AddAppointment";
+=======
+import { Events, EventSchema } from '/imports/api/event/Event';
+import { withTracker } from 'meteor/react-meteor-data';
+>>>>>>> 8d31918fffda419659c0df6677d08665b05a11c0
 
 class Landing extends React.Component {
 
@@ -60,6 +65,8 @@ class Landing extends React.Component {
     const dateFormat = "d";
     const rows = [];
 
+    console.log(this.props.events);
+
     let days = [];
     let day = startDate;
     let formattedDate = "";
@@ -68,6 +75,8 @@ class Landing extends React.Component {
       for (let i = 0; i < 7; i++) {
         formattedDate = dateFns.format(day, dateFormat);
         const cloneDay = day;
+        const month = dateFns.format(day, "M");
+        const year = dateFns.format(day, "yyyy");
         days.push(
             <div
                 className={`col cell ${
@@ -81,9 +90,7 @@ class Landing extends React.Component {
               <span className="number">{formattedDate}</span>
               <span className="bg">{formattedDate}</span>
               {/*this.props.events.map((event) => <Event key={event._id} event={event} />)*/}
-              <Event>
-                <Modal/>
-              </Event>
+              <Event/> 
             </div>
         );
         day = dateFns.addDays(day, 1);
@@ -127,10 +134,12 @@ class Landing extends React.Component {
   }
 }
 
-/** Require an array of Event documents in the props. */
-Landing.propTypes = {
-  events: PropTypes.array.isRequired,
-  ready: PropTypes.bool.isRequired,
-};
 
-export default Landing;
+
+export default withTracker(() => {
+    const events_subscription = Meteor.subscribe('Events');
+    return {
+        events: Events.find({}).fetch(),
+        ready: events_subscription.ready(),
+    };
+})(Landing);

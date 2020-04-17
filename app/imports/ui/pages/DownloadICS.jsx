@@ -3,6 +3,7 @@ import { Loader, Button } from 'semantic-ui-react';
 import { Events, EventSchema } from '/imports/api/event/Event';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 
 class DownloadICS extends React.Component {
     constructor(props) {
@@ -16,22 +17,38 @@ class DownloadICS extends React.Component {
     download() {
         let fileDownload = require('react-file-download');
         let result = "BEGIN:VCALENDAR\n";
+        const geolocation = require("geolocation");
+        const tzlookup = require("tz-lookup");
         result += "VERSION:2.0\n";
+        geolocation.getCurrentPosition(function (err, position) {
+            if (err) throw err;
+            result += "BEGIN:VTIMEZONE\n";
+            result += "TZID:";
+            result += tzlookup(position.coords.latitude, position.coord.longitude);
+            result += "\n";
+            result += "END:VTIMEZONE\n";
+        });
 
         for (let my_event of this.props.events) {
-            console.log(my_event);
             result += "BEGIN:VEVENT\n";
             result += "SUMMARY:" + my_event.summary + "\n";
-            result += "DTSTART:" + my_event.start + "\n";
-            result += "DTEND:" + my_event.end + "\n";
+            result += "DTSTART:" + format(my_event.start, "yyyyMMdd'T'HHmmss'Z'") + "\n";
+            result += "DTEND:" + format(my_event.end, "yyyyMMdd'T'HHmmss'Z'") + "\n";
             result += "CLASS:" + my_event.access_class + "\n";
-            result += my_event.geolocation ? ("GEO:" + my_event.geolocation + "\n") : "";
+            result += my_event.geolocation ?
+                      ("GEO:" + my_event.geolocation + "\n") : "";
             result += "PRIORITY:" + my_event.priority + "\n"; 
-            result += my_event.location ? "LOCATION:" + my_event.location + "\n" : "";
+            result += my_event.location ?
+                      "LOCATION:" + my_event.location + "\n" : "";
+            result += my_event.resources ? 
+                      "RESOURCES:" + my_event.resources + "\n" : "";
+            result += "ATTENDEE;RSVP=";
+            result += my_event.rsvp.length ?
+                      "TRUE:mailto:" + my_event.rsvp + "\n" : "FALSE\n"
+            result += my_event.organizer ? "ORGANIZER;SENT-BY=mailto:" + my_event.organizer + '\n' : "";
             result += "END:VEVENT\n";
-            console.log(my_event.location);
         }
-        result += "END:VCALENDAR";
+        result += "END:VCALENDAR\n";
         fileDownload(result, 'events.ics');
     }
 
