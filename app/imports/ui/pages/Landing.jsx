@@ -3,7 +3,6 @@ import dateFns from "date-fns";
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import Event from "../components/Event";
 import PropTypes from 'prop-types';
-import ModalWindow from "../components/ModalWindow";
 import { Events, EventSchema } from '/imports/api/event/Event';
 import { withTracker } from 'meteor/react-meteor-data';
 
