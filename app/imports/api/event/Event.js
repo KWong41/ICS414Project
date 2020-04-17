@@ -9,8 +9,8 @@ const Events = new Mongo.Collection('Events');
 const EventSchema = new SimpleSchema({
   owner: String,
   summary: String,
-  start: String,
-  end: String,
+  start: Date,
+  end: Date,
   organizer: String,
   rsvp : [String], 
   geolocation: {
