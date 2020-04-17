@@ -42,13 +42,10 @@ const formSchema = new SimpleSchema({
     },
 });
 
-const rsvpFormSchema = new SimpleSchema({
-    rsvp: String,
-});
-
 class AddAppointment extends React.Component {
 
-  geolocation = null;
+  geo_lat = null;
+  geo_long = null;
 
   /** On submit, insert the data. */
   submit(data, formRef) {
@@ -59,15 +56,11 @@ class AddAppointment extends React.Component {
           "yyyyMMdd'T'HHmmss'Z'");
     const end = format(new Date(end_year, end_month - 1, end_day),
           "yyyyMMdd'T'HHmmss'Z'");
-    const geolocation = this.geolocation ?
-          this.geolocation.coords.latitude + ";"
-          + this.geolocation.coords.longitude
-          : null;
-    const rsvp = people.trim().split(",");
-    console.log(rsvp);
+    const geolocation = this.geo_lat && this.geo_long ? this.geo_lat + ";" + this.geo_long : null;
+    const rsvp = people ? people.trim().split(",") : [];
 
     if (start_month < 1 || start_month > 12) {
-        swal('Error', 'Start month out of range', 'error');
+    
     } else if (start_day < 1 || start_day > 31) {
         swal ('Error', 'Start day out of range', 'error');
     } else if (end_month < 1 || end_month > 12) {
@@ -78,8 +71,9 @@ class AddAppointment extends React.Component {
         swal ('Error', 'Start must come before end date', 'error');
     } else {
         const owner = Meteor.user().username;
+        const organizer = Meteor.user().username;
         Events.insert({ summary, start, end, access_class, geolocation, priority,
-                        location, resources, rsvp, owner },
+                        location, resources, rsvp, organizer, owner },
           (error) => {
             if (error) {
               swal('Error', error.message, 'error');
@@ -101,7 +95,8 @@ class AddAppointment extends React.Component {
     const geolocation_finder = require('geolocation');
     geolocation_finder.getCurrentPosition((err, position) => {
         if (err) throw err;
-        this.geolocation = position;
+        this.geo_lat = position.coords.latitude;
+        this.geo_long = position.coords.longitude;
     });
     return (
         <Grid container centered>

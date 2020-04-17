@@ -11,7 +11,13 @@ const EventSchema = new SimpleSchema({
   summary: String,
   start: String,
   end: String,
+  organizer: String,
+  rsvp : [String], 
   geolocation: {
+      type: String,
+      optional: true,
+  },
+  timezone: {
       type: String,
       optional: true,
   },
@@ -31,8 +37,7 @@ const EventSchema = new SimpleSchema({
   resources: {
       type: String,
       optional: true,
-  },
-  rsvp : [String] 
+  }
 }, { tracker: Tracker });
 
 /** Attach this schema to the collection. */

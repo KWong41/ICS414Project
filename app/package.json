@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "@babel/runtime": "^7.8.3",
+    "@mapbox/timespace": "^2.0.4",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "core-js": "^3.6.4",
@@ -10,6 +11,7 @@
     "date-fns": "^2.10.0",
     "express": "^4.17.1",
     "formidable": "^1.2.2",
+    "geo-tz": "^5.1.0",
     "geolocation": "^0.2.0",
     "graphql": "^14.5.8",
     "meteor-node-stubs": "^0.4.1",
@@ -24,7 +26,9 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
     "simpl-schema": "^1.5.6",
+    "simple-schema": "^1.1.0",
     "sweetalert": "^2.1.2",
+    "tz-lookup": "^6.1.25",
     "uniforms": "^2.6.5",
     "uniforms-bridge-simple-schema-2": "^2.6.5",
     "uniforms-semantic": "^2.6.5"

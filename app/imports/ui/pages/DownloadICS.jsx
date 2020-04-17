@@ -16,14 +16,19 @@ class DownloadICS extends React.Component {
     download() {
         let fileDownload = require('react-file-download');
         let result = "BEGIN:VCALENDAR\n";
+        const geolocation = require("geolocation");
+        const tzlookup = require("tz-lookup");
         result += "VERSION:2.0\n";
-        result += "START:VTIMEZONE\n"
-        result += "TZID:"
-        result += /\((.*)\)/.exec(new Date().toString())[1] + "\n";
-        result += "END:VTIMEZONE\n"
+        geolocation.getCurrentPosition(function (err, position) {
+            if (err) throw err;
+            result += "BEGIN:VTIMEZONE\n";
+            result += "TZID:";
+            result += tzlookup(position.coords.latitude, position.coord.longitude);
+            result += "\n";
+            result += "END:VTIMEZONE\n";
+        });
 
         for (let my_event of this.props.events) {
-            console.log(my_event);
             result += "BEGIN:VEVENT\n";
             result += "SUMMARY:" + my_event.summary + "\n";
             result += "DTSTART:" + my_event.start + "\n";
@@ -39,10 +44,10 @@ class DownloadICS extends React.Component {
             result += "ATTENDEE;RSVP=";
             result += my_event.rsvp.length ?
                       "TRUE:mailto:" + my_event.rsvp + "\n" : "FALSE\n"
-                      
+            result += my_event.organizer ? "ORGANIZER;SENT-BY=mailto:" + my_event.organizer + '\n' : "";
             result += "END:VEVENT\n";
         }
-        result += "END:VCALENDAR";
+        result += "END:VCALENDAR\n";
         fileDownload(result, 'events.ics');
     }
 
