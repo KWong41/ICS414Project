@@ -2,8 +2,7 @@ import React from "react";
 import dateFns from "date-fns";
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import Event from "../components/Event";
-import PropTypes from 'prop-types';
-import ModalWindow from "../components/ModalWindow";
+import {AddAppointment, summary, start_month, start_day, start_year, end_month, end_day, end_year, access_class, priority, location} from "../pages/AddAppointment";
 import { Events, EventSchema } from '/imports/api/event/Event';
 import { withTracker } from 'meteor/react-meteor-data';
 
@@ -71,7 +70,7 @@ class Landing extends React.Component {
         const event_month = String(event_element.start.getMonth());
         const event_year = String(event_element.start.getYear());
         const event_day = String(event_element.start.getDate());
-        events_date.push(`${event_month}-${event_day}-${event_year}`); 
+        events_date.push(`${event_month}-${event_day}-${event_year}`);
     }
 
     while (day <= endDate) {
@@ -99,7 +98,7 @@ class Landing extends React.Component {
             >
               <span className="number">{formattedDate}</span>
               <span className="bg">{formattedDate}</span>
-              <Event events={events}/> 
+              <Event events={events}/>
             </div>
         );
         day = dateFns.addDays(day, 1);

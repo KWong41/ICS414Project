@@ -1,15 +1,11 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { format } from 'date-fns';
 import { Button, Grid, Segment, Header, Loader } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, TextField} from 'uniforms-semantic';
 import swal from 'sweetalert';
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import SimpleSchema from 'simpl-schema';
 import { Events, EventSchema } from '/imports/api/event/Event';
-import { withTracker } from 'meteor/react-meteor-data';
-import PropTypes from 'prop-types';
-
 
 const formSchema = new SimpleSchema({
     summary: String,
@@ -61,10 +57,11 @@ class AddAppointment extends React.Component {
     const geolocation = this.geo_lat && this.geo_long ? this.geo_lat + ";" + this.geo_long : null;
     const rsvp = people ? people.trim().split(",") : [];
 
+    if (data.start_month < 1 || data.start_month > 12) {
+        swal('Error', 'Start month out of range', 'error');
+    }
 
-    if (start_month < 1 || start_month > 12) {
-    
-    } else if (start_day < 1 || start_day > 31) {
+    if (data.start_day < 1 || data.start_day > 31) {
 
         swal ('Error', 'Start day out of range', 'error');
     }
