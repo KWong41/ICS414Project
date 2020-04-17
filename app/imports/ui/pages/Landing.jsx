@@ -8,9 +8,10 @@ import { Events, EventSchema } from '/imports/api/event/Event';
 import { withTracker } from 'meteor/react-meteor-data';
 
 class Landing extends React.Component {
+
   state = {
     currentMonth: new Date(),
-    selectedDate: new Date()
+    selectedDate: new Date(),
   };
 
   renderHeader() {

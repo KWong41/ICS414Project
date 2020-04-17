@@ -29,7 +29,7 @@
   --text-color: #777;
   --text-color-light: #ccc;
   --border-color: #eee;
-  --bg-color: #f9f9f9;
+  --bg-color: green;
   --neutral-color: #fff;
 }
 
@@ -113,7 +113,6 @@ main {
   text-align: right;
 }
 
-
 /* Calendar */
 
 .calendar {
@@ -122,6 +121,8 @@ main {
   width: 100%;
   background: var(--neutral-color);
   border: 1px solid var(--border-color);
+  font-family: Oswald;
+  font-size:20px;
 }
 
 .calendar .header {
@@ -130,6 +131,7 @@ main {
   font-size: 115%;
   padding: 1.5em 0;
   border-bottom: 1px solid var(--border-color);
+  font-family: Oswald;
 }
 
 .calendar .header .icon {
