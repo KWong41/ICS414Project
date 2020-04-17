@@ -20,20 +20,22 @@ const App = ({ children }) => (
 /** Renders a single row in the List Stuff table. See pages/Calendar.jsx. */
 class Event extends React.Component {
   render() {
+    let events = [];
     let event_start;
     let event_end;
     let event_name;
-    if (this.props.event_element) {
-        event_start = this.props.event_element.start;
-        event_end = this.props.event_element.end;
+    for (const event_element of this.props.events) {
+        event_start = event_element.start;
+        event_end = event_element.end;
         event_start = `${event_start.getHours().pad()}:${event_start.getMinutes().pad()}`;
         event_end = `${event_end.getHours().pad()}:${event_end.getMinutes().pad()}`;
-        event_name = this.props.event_element.summary;
-    } 
+        event_name = event_element.summary;
+        events.push([event_start, event_end, event_name]);
+    }
 
     return (
       <App>
-        {this.props.event_element ? <ModalWindow start={event_start} end={event_end} name={event_name}/> : null}
+        {events.length ? <ModalWindow event_info_array={events}/> : null}
       </App>
     );
   }
@@ -41,7 +43,7 @@ class Event extends React.Component {
 
 /** Require a document to be passed to this component. */
 Event.propTypes = {
-  event_element: PropTypes.object,
+  events: PropTypes.array,
 };
 
 /** Wrap this component in withRouter since we use the <Link> React Router element. */

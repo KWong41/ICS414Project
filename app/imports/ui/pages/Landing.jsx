@@ -80,11 +80,10 @@ class Landing extends React.Component {
         const event_month = String(day.getMonth());
         const event_year = String(day.getYear());
         const event_day = String(day.getDate());
-        let my_event;
-        let index;
-
-        if ((index = events_date.indexOf(`${event_month}-${event_day}-${event_year}`)) != -1) {
-            my_event = this.props.events[index]; 
+        let index_of_events = this.getAllIndexes(events_date,`${event_month}-${event_day}-${event_year}`);
+        let events = [];
+        for (const i of index_of_events) {
+            events.push(this.props.events[i]);
         }
 
         days.push(
@@ -99,7 +98,7 @@ class Landing extends React.Component {
             >
               <span className="number">{formattedDate}</span>
               <span className="bg">{formattedDate}</span>
-              <Event event_element={my_event}/> 
+              <Event events={events}/> 
             </div>
         );
         day = dateFns.addDays(day, 1);
@@ -140,6 +139,14 @@ class Landing extends React.Component {
           {this.renderCells()}
         </div>
     );
+  }
+
+  getAllIndexes(array, val) {
+      var indexes = [], i;
+      for (i = 0; i < array.length; i++) {
+          if (array[i] == val) indexes.push(i);
+      }
+      return indexes;
   }
 }
 

@@ -12,12 +12,13 @@ class ModalWindow extends React.Component {
             <Modal.Description>
               <Header>Details of Appointment</Header>
               <List selection>
-                <List.Item>
-                  <Label color='blue' horizontal>
-                    {this.props.start}  -  {this.props.end}
-                  </Label>
-                    {this.props.name}
-                </List.Item>
+                {this.props.event_info_array.map((event_element, index) =>
+                    <List.Item>
+                        <Label color='blue' horizontal>
+                            {event_element[0]} - {event_element[1]}
+                        </Label>
+                        {event_element[2]}
+                    </List.Item>)}
               </List>
             </Modal.Description>
           </Modal.Content>
@@ -27,9 +28,7 @@ class ModalWindow extends React.Component {
 }
 
 ModalWindow.propTypes = {
-    start: PropTypes.string.isRequired,
-    end: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    event_info_array: PropTypes.array.isRequired,
 };
 
 export default withRouter(ModalWindow);
