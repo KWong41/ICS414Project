@@ -33,18 +33,19 @@ class DownloadICS extends React.Component {
             result += "BEGIN:VEVENT\n";
             result += "SUMMARY:" + my_event.summary + "\n";
             result += "DTSTART:" + format(my_event.start, "yyyyMMdd'T'HHmmss'Z'") + "\n";
+
+            if (my_event.frequency && my_event.repeat_occurences) {
+                result += `RRULE:FREQ=${my_event.frequency};COUNT=${my_event.repeat_occurences}`;
+            }
+
             result += "DTEND:" + format(my_event.end, "yyyyMMdd'T'HHmmss'Z'") + "\n";
             result += "CLASS:" + my_event.access_class + "\n";
-            result += my_event.geolocation ?
-                      ("GEO:" + my_event.geolocation + "\n") : "";
+            result += my_event.geolocation ? ("GEO:" + my_event.geolocation + "\n") : "";
             result += "PRIORITY:" + my_event.priority + "\n"; 
-            result += my_event.location ?
-                      "LOCATION:" + my_event.location + "\n" : "";
-            result += my_event.resources ? 
-                      "RESOURCES:" + my_event.resources + "\n" : "";
+            result += my_event.location ? "LOCATION:" + my_event.location + "\n" : "";
+            result += my_event.resources ? "RESOURCES:" + my_event.resources + "\n" : "";
             result += "ATTENDEE;RSVP=";
-            result += my_event.rsvp.length ?
-                      "TRUE:mailto:" + my_event.rsvp + "\n" : "FALSE\n"
+            result += my_event.rsvp.length ? "TRUE:mailto:" + my_event.rsvp + "\n" : "FALSE\n"
             result += my_event.organizer ? "ORGANIZER;SENT-BY=mailto:" + my_event.organizer + '\n' : "";
             result += "END:VEVENT\n";
         }

@@ -65,6 +65,10 @@ class UploadICS extends React.Component {
                 temp_event.rsvp = event_string.substr(26).split(',');
             } else if (event_string.substr(0, 25) == "ORGANIZER;SENT-BY=mailto:") {
                 temp_event.organizer = event_string.substr(25);
+            } else if (event_string.substr(0, 6) == "RRULE:") {
+                const temp_str = event_string.split(";");
+                temp_event.frequency = temp_str[0].substr(6);
+                temp_event.repeat_occurences = temp_str[1].substr(6);
             } else if (event_string == "END:VEVENT") {
                 result.push(temp_event);
             } else if (event_string.substr(0, 8) == "VERSION:") {

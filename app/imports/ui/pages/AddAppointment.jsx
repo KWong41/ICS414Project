@@ -12,6 +12,17 @@ const formSchema = new SimpleSchema({
     summary: String,
     start_time: String,
     end_time: String,
+    frequency: {
+        type: String,
+        allowedValues: ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'],
+        optional: true,
+        defaultValue: null,
+    },
+    repeat_occurences: {
+        type: Number,
+        optional: true,
+        defaultValue: null,
+    },
     location: {
         type: String,
         optional: true,
@@ -43,7 +54,8 @@ class AddAppointment extends React.Component {
   /** On submit, insert the data. */
   submit(data, formRef) {
     const { summary, start_time, end_time, access_class,
-            priority, location, resources, people } = data;
+            priority, location, resources, people,
+            frequency, repeat_occurences} = data;
 
     let decode_start_time = start_time.split(":");
     decode_start_time[0] = parseInt(decode_start_time[0]);
@@ -57,8 +69,8 @@ class AddAppointment extends React.Component {
     const event_day = this.props.day.substring(3, 5);
     const event_year = this.props.day.substring(6);
 
-    const start = new Date(event_year, event_month - 1, event_day, decode_start_time[0], decode_start_time[1]);
-    const end = new Date(event_year, event_month - 1, event_day, decode_end_time[0], decode_end_time[1]);
+    let start = new Date(event_year, event_month - 1, event_day, decode_start_time[0], decode_start_time[1]);
+    let end = new Date(event_year, event_month - 1, event_day, decode_end_time[0], decode_end_time[1]);
     const geolocation = this.geo_lat && this.geo_long ? this.geo_lat + ";" + this.geo_long : null;
     const rsvp = people ? people.trim().split(",") : [];
 
@@ -76,19 +88,71 @@ class AddAppointment extends React.Component {
         swal ('Error', 'End time must be in 24-hour time hh:mm format, such as 15:00', 'error');
     } else if (start > end) {
         swal ('Error', 'Start must come before end date', 'error');
+    } else if (frequency == null && repeat_occurences != null) {
+        swal ('Error', 'Please select a frequency', 'error');
+    } else if (frequency != null && repeat_occurences == null) {
+        swal ('Error', 'Please add a number of times the event repeats', 'error');
     } else {
         const owner = Meteor.user().username;
         const organizer = Meteor.user().username;
-        Events.insert({ summary, start, end, access_class, geolocation, priority,
-                        location, resources, rsvp, organizer, owner },
-          (error) => {
-            if (error) {
-              swal('Error', error.message, 'error');
-            } else {
-              swal('Success', 'Item added successfully', 'success');
-              formRef.reset();
+        let events = [];
+        if (repeat_occurences && frequency == "DAILY") {
+            for (let i = 0; i < repeat_occurences; i++) {
+                start = new Date(event_year, event_month - 1, event_day + i, decode_start_time[0], decode_start_time[1]);
+                end = new Date(event_year, event_month - 1, event_day + i, decode_end_time[0], decode_end_time[1]); 
+                events.push({summary, start, end, access_class, geolocation, priority,
+                             location, resources, rsvp, organizer, owner});
             }
-          });
+        } else if (repeat_occurences && frequency == "WEEKLY") {
+            for (let i = 0; i < repeat_occurences; i++) {
+                start = new Date(event_year, event_month - 1, event_day + (7 * i), decode_start_time[0], decode_start_time[1]);
+                end = new Date(event_year, event_month - 1, event_day + (7 * i), decode_end_time[0], decode_end_time[1]); 
+                events.push({summary, start, end, access_class, geolcation, priority,
+                             location, resources, rsvp, organizer, owner});
+            }
+        } else if (repeat_occurences && frequency == "MONTHLY") {
+            for (let i = 0; i < repeat_occurences; i++) {
+                start = new Date(event_year, event_month - 1 + i, event_day, decode_start_time[0], decode_start_time[1]);
+                end = new Date(event_year, event_month - 1 + i, event_day, decode_end_time[0], decode_end_time[1]); 
+                events.push({summary, start, end, access_class, geolcation, priority,
+                             location, resources, rsvp, organizer, owner});
+            }
+        } else if (repeat_occurences && frequency == "YEARLY") {
+            for (let i = 0; i < repeat_occurences; i++) {
+                start = new Date(event_year + i, event_month - 1, event_day, decode_start_time[0], decode_start_time[1]);
+                end = new Date(event_year + i, event_month - 1, event_day, decode_end_time[0], decode_end_time[1]);
+                events.push({summary, start, end, access_class, geolcation, priority,
+                             location, resources, rsvp, organizer, owner});
+            }
+        } else {
+            events.push({summary, start, end, access_class, geolocation, priority,
+                         location, resources, rsvp, organizer, owner});
+        }
+
+        if (repeat_occurences) {
+            for (let i = 0; i < repeat_occurences; i++) {
+                console.log(events[i]);
+                Events.insert(events[i],
+                  (error) => {
+                    if (error) {
+                      swal('Error', error.message, 'error');
+                    } else {
+                      swal('Success', 'Item added successfully', 'success');
+                      formRef.reset();
+                    }
+                  });
+                }
+        } else {
+           Events.insert(events[0],
+                  (error) => {
+                    if (error) {
+                      swal('Error', error.message, 'error');
+                    } else {
+                      swal('Success', 'Item added successfully', 'success');
+                      formRef.reset();
+                    }
+                  });
+                }
         }
     }
 
@@ -118,6 +182,8 @@ class AddAppointment extends React.Component {
                 <TextField name='location'/>
                 <TextField name='resources'/>
                 <TextField name='people'/>
+                <RadioField name='frequency'/>
+                <NumField name='repeat_occurences'/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
               </Segment>
