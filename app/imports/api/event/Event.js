@@ -37,6 +37,14 @@ const EventSchema = new SimpleSchema({
   resources: {
       type: String,
       optional: true,
+  },
+  frequency: {
+      type: String,
+      optional: true,
+  },
+  repeat_occurences: {
+      type: Number,
+      optional: true,
   }
 }, { tracker: Tracker });
 
