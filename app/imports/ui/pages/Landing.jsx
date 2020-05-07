@@ -5,12 +5,17 @@ import Event from "../components/Event";
 import {AddAppointment, summary, start_month, start_day, start_year, end_month, end_day, end_year, access_class, priority, location} from "../pages/AddAppointment";
 import { Events, EventSchema } from '/imports/api/event/Event';
 import { withTracker } from 'meteor/react-meteor-data';
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
 class Landing extends React.Component {
 
+  previousDate = null;
+  selectedDate = null;
+
   state = {
     currentMonth: new Date(),
-    selectedDate: new Date(),
+    previousDate: null,
+    selectedDate: null,
   };
 
   renderHeader() {
@@ -94,7 +99,7 @@ class Landing extends React.Component {
                         : dateFns.isSameDay(day, selectedDate) ? "selected" : ""
                 }`}
                 key={day}
-                onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
+                onClick={() => this.onDateClick(dateFns.format(cloneDay, "MM-dd-yyyy"))}
             >
               <span className="number">{formattedDate}</span>
               <span className="bg">{formattedDate}</span>
@@ -113,10 +118,12 @@ class Landing extends React.Component {
     return <div className="body">{rows}</div>;
   }
 
-  onDateClick = day => {
-    this.setState({
-      selectedDate: day
-    });
+  onDateClick = (day) => {
+      this.previousDate = this.selectedDate;
+      this.selectedDate = day;
+      if (this.selectedDate == this.previousDate) {
+          FlowRouter.go(`#/add/${day}`);
+      }
   };
 
   nextMonth = () => {

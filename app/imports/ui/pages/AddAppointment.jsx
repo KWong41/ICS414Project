@@ -1,20 +1,17 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Button, Grid, Segment, Header, Loader } from 'semantic-ui-react';
-import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, TextField} from 'uniforms-semantic';
+import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, RadioField, TextField} from 'uniforms-semantic';
 import swal from 'sweetalert';
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import SimpleSchema from 'simpl-schema';
 import { Events, EventSchema } from '/imports/api/event/Event';
+import { withTracker } from 'meteor/react-meteor-data';
 
 const formSchema = new SimpleSchema({
     summary: String,
-    start_month: Number,
-    start_day: Number,
-    start_year: Number,
-    end_month: Number,
-    end_day: Number,
-    end_year: Number,
+    start_time: String,
+    end_time: String,
     location: {
         type: String,
         optional: true,
@@ -45,32 +42,39 @@ class AddAppointment extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    const { summary, start_month, start_day, start_year, end_month, end_day,
-            end_year, access_class, priority, location, resources,
-            people } = data;
-    const start = new Date(start_year, start_month - 1, start_day);
-    const end = new Date(end_year, end_month - 1, end_day);
+    const { summary, start_time, end_time, access_class,
+            priority, location, resources, people } = data;
+
+    let decode_start_time = start_time.split(":");
+    decode_start_time[0] = parseInt(decode_start_time[0]);
+    decode_start_time[1] = parseInt(decode_start_time[1]);
+
+    let decode_end_time = end_time.split(":");
+    decode_end_time[0] = parseInt(decode_end_time[0]);
+    decode_end_time[1] = parseInt(decode_end_time[1]);
+
+    const event_month = this.props.day.substring(0, 2);
+    const event_day = this.props.day.substring(3, 5);
+    const event_year = this.props.day.substring(6);
+
+    const start = new Date(event_year, event_month - 1, event_day, decode_start_time[0], decode_start_time[1]);
+    const end = new Date(event_year, event_month - 1, event_day, decode_end_time[0], decode_end_time[1]);
     const geolocation = this.geo_lat && this.geo_long ? this.geo_lat + ";" + this.geo_long : null;
     const rsvp = people ? people.trim().split(",") : [];
 
-    if (data.start_month < 1 || data.start_month > 12) {
-        swal('Error', 'Start month out of range', 'error');
-    }
-
-    if (data.start_day < 1 || data.start_day > 31) {
-
-        swal ('Error', 'Start day out of range', 'error');
-    }
-
-    if (data.end_month < 1 || data.end_month > 12) {
-        swal('Error', 'End month out of range', 'error');
-    }
-
-    if (data.end_day < 1 || data.end_day > 31) {
-        swal ('Error', 'End day out of range', 'error');
-    }
-
-    if (start > end) {
+    if (!(/^\d{2}:\d{2}$/.test(start_time))) {
+        swal ('Error', 'Start time must be in 24-hour time hh:mm format, such as 09:00', 'error');
+    } else if (decode_start_time[0] < 0 || decode_start_time[0] > 24) {
+        swal ('Error', 'Start time must be in 24-hour time hh:mm format, such as 15:00', 'error');
+    } else if (decode_start_time[1] < 0 || decode_start_time[1] > 59) {
+        swal ('Error', 'Start time must be in 24-hour time hh:mm format, such as 15:00', 'error');
+    } else if (!(/^\d{2}:\d{2}$/.test(end_time))) {
+        swal ('Error', 'End time must be in 24-hour time hh:mm format, such as 09:00', 'error');
+    } else if (decode_end_time[0] < 0 || decode_end_time[0] > 24) {
+        swal ('Error', 'End time must be in 24-hour time hh:mm format, such as 15:00', 'error');
+    } else if (decode_end_time[1] < 0 || decode_end_time[1] > 59) {
+        swal ('Error', 'End time must be in 24-hour time hh:mm format, such as 15:00', 'error');
+    } else if (start > end) {
         swal ('Error', 'Start must come before end date', 'error');
     } else {
         const owner = Meteor.user().username;
@@ -108,12 +112,8 @@ class AddAppointment extends React.Component {
             <AutoForm ref={ref => { fRef = ref; }} schema={formSchema} onSubmit={data => this.submit(data, fRef)} >
               <Segment>
                 <TextField name='summary'/>
-                <NumField name='start_month'/>
-                <NumField name='start_day'/>
-                <NumField name='start_year'/>
-                <NumField name='end_month'/>
-                <NumField name='end_day'/>
-                <NumField name='end_year'/>
+                <TextField name='start_time'/>
+                <TextField name='end_time'/>
                 <NumField name='priority'/>
                 <TextField name='location'/>
                 <TextField name='resources'/>
@@ -128,4 +128,8 @@ class AddAppointment extends React.Component {
   }
 }
 
-export default AddAppointment;
+export default withTracker(({ match }) => {
+    return {
+        day: match.params.day,
+    };
+})(AddAppointment);
